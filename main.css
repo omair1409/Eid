@@ -1,0 +1,38 @@
+const nameInput = document.getElementById("nameInput");
+const submitButton = document.getElementById("submitButton");
+const downloadLink = document.getElementById("downloadLink");
+const downloadImage = document.getElementById("downloadImage");
+
+submitButton.addEventListener("click", function() {
+  const name = nameInput.value;
+  if (name) {
+    const nameDisplay = document.createElement("p");
+    nameDisplay.textContent = name;
+    nameDisplay.style.textAlign = "center";
+    nameDisplay.style.marginTop = "10px";
+    document.querySelector(".container").appendChild(nameDisplay);
+
+    // Create a temporary canvas to draw image and text
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+
+    // Set canvas dimensions to match the image
+    canvas.width = downloadImage.width;
+    canvas.height = downloadImage.height;
+
+    // Draw the image onto the canvas
+    context.drawImage(downloadImage, 0, 0);
+
+    // Add the name text below the image
+    context.fillStyle = "#000"; // Text color (black)
+    context.font = "20px Arial"; // Font style and size
+    const nameWidth = context.measureText(name).width; // Measure text width
+    context.fillText(name, (canvas.width - nameWidth) / 2, canvas.height - 10); // Center the text
+
+    // Set download link attributes
+    downloadLink.href = canvas.toDataURL("image/jpeg"); // Set image data as download source
+    downloadLink.download = `image_with_name_${name}.jpg`; // Set download filename
+
+    nameInput.value = ""; // Clear input field after submit
+  }
+});
